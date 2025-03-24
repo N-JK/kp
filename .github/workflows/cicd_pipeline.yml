@@ -42,22 +42,37 @@ jobs:
           git clone https://github.com/N-JK/grocery_delivery.git .
 
           # Debug: List files in the directory to verify contents
+          echo "Listing files after clone:"
           ls -la
 
           # Create and activate the virtual environment
           python3 -m venv venv
           source venv/bin/activate
 
+          # Debug: Verify Python and pip versions
+          echo "Python version:"
+          python3 --version
+          echo "Pip version:"
+          pip --version
+
           # Install dependencies
-          pip install -r requirements.txt
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          else
+            echo "Error: requirements.txt not found!"
+            exit 1
+          fi
 
           # Apply database migrations
-          python3 manage.py migrate
+          if [ -f "manage.py" ]; then
+            python3 manage.py migrate
+          else
+            echo "Error: manage.py not found!"
+            exit 1
+          fi
 
           # Collect static files
           python3 manage.py collectstatic --noinput
 
           # Start the Django development server
           python3 manage.py runserver 0.0.0.0:8000 &
-
-          EOF

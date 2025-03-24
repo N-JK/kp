@@ -1,0 +1,63 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}All Products - Fresh Mart{% endblock %}
+
+{% block content %}
+<div class="products-header">
+    <div class="container">
+        <h1 class="products-title">All Products</h1>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="products-grid">
+        {% for product in products %}
+            {% include 'store/includes/product_card.html' with product=product %}
+        {% empty %}
+            <div class="no-products">
+                <p>No products available.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle add to cart forms
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert('Product added to cart successfully!');
+                    // Update cart count if needed
+                    if (data.cart_count !== undefined) {
+                        document.querySelector('.cart-count').textContent = data.cart_count;
+                    }
+                } else {
+                    alert(data.error || 'Failed to add product to cart');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding the product to cart');
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

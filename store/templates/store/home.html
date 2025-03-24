@@ -1,0 +1,384 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Fresh Mart - Premium Grocery Delivery{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                    url('https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974&auto=format&fit=crop') no-repeat center center;
+        background-size: cover;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        position: relative;
+    }
+    
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .hero-content p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    /* Login Buttons */
+    .login-buttons {
+        margin-top: 2rem;
+    }
+    
+    .login-btn {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        margin: 0.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .supplier-login {
+        background-color: #00b761;
+        color: white;
+        border: 2px solid #00b761;
+    }
+    
+    .supplier-login:hover {
+        background-color: transparent;
+        color: white;
+        border-color: white;
+    }
+
+    /* Search Bar */
+    .search-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        position: relative;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .search-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #00b761;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+    }
+    
+    /* Category Section */
+    .categories-section {
+        padding: 5rem 0;
+        background-color: #f8f9fa;
+    }
+    
+    .category-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 2rem;
+        background: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .category-img {
+        height: 250px;
+        object-fit: cover;
+        width: 100%;
+    }
+    
+    .category-content {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    /* Featured Products */
+    .featured-products {
+        padding: 5rem 0;
+    }
+    
+    .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+    
+    .section-title:after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: #00b761;
+        margin: 1rem auto;
+    }
+    
+    .product-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        height: 100%;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .product-img {
+        height: 250px;
+        object-fit: cover;
+    }
+    
+    .product-content {
+        padding: 1.5rem;
+    }
+    
+    .product-price {
+        color: #00b761;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+    
+    /* Features Section */
+    .features-section {
+        padding: 5rem 0;
+        background-color: #f8f9fa;
+    }
+    
+    .feature-card {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 15px;
+        background: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        height: 100%;
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+        color: #00b761;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Buttons */
+    .btn-primary {
+        background-color: #00b761;
+        border-color: #00b761;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: #009951;
+        border-color: #009951;
+        transform: translateY(-2px);
+    }
+    
+    /* Animations */
+    .fade-up {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="fade-up">Fresh Food Delivered Fresh</h1>
+            <p class="fade-up">Get your groceries delivered to your doorstep within hours. Fresh, quality products guaranteed.</p>
+            <div class="login-buttons fade-up">
+                <a href="{% url 'login' %}" class="login-btn btn-primary">Shop Now</a>
+            </div>
+            <div class="search-container fade-up">
+                <form action="{% url 'search' %}" method="GET" class="d-flex">
+                    <input type="text" name="q" class="search-bar" placeholder="Search for groceries..." required>
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg mt-4 fade-up">Start Shopping</a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="container">
+        <h2 class="section-title fade-up">Shop by Category</h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-4 fade-up">
+                <a href="{% url 'category_products' category.slug %}" class="text-decoration-none">
+                    <div class="category-card">
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
+                        <div class="category-content">
+                            <h3 class="mb-0">{{ category.name }}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="featured-products">
+    <div class="container">
+        <h2 class="section-title fade-up">Featured Products</h2>
+        <div class="row g-4">
+            {% if featured_products %}
+                {% for product in featured_products %}
+                <div class="col-md-3 fade-up">
+                    <div class="product-card">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+                        {% else %}
+                            <img src="{% static 'store/images/no-image.png' %}" alt="{{ product.name }}" class="product-img">
+                        {% endif %}
+                        <div class="product-content">
+                            <h5 class="mb-2">{{ product.name }}</h5>
+                            <p class="product-price mb-3">${{ product.price }}</p>
+                            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <p>No featured products available at the moment.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4 fade-up">
+                <div class="feature-card">
+                    <i class="fas fa-truck feature-icon"></i>
+                    <h3>Fast Delivery</h3>
+                    <p>Get your groceries delivered within hours</p>
+                </div>
+            </div>
+            <div class="col-md-4 fade-up">
+                <div class="feature-card">
+                    <i class="fas fa-leaf feature-icon"></i>
+                    <h3>Fresh & Organic</h3>
+                    <p>100% fresh and organic products</p>
+                </div>
+            </div>
+            <div class="col-md-4 fade-up">
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3>Secure Payments</h3>
+                    <p>Multiple secure payment options</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function revealOnScroll() {
+        const elements = document.querySelectorAll('.fade-up');
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (elementTop < windowHeight - 50) {
+                element.classList.add('visible');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+</script>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">Fresh Mart</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart' %}">
+                        <i class="fas fa-shopping-cart"></i> Cart
+                        <span class="badge bg-secondary">{{ cart_count }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link login-btn supplier-login" href="{% url 'supplier_login' %}">
+                        <i class="fas fa-truck"></i> Supplier Login
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}

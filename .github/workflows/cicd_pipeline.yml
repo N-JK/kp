@@ -75,4 +75,4 @@ jobs:
           python3 manage.py collectstatic --noinput
 
           # Start the Django development server
-          nohup python3 manage.py runserver 0.0.0.0:8000 &
+          nohup python3 manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &

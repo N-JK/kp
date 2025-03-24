@@ -39,7 +39,7 @@ jobs:
           sudo chown -R ubuntu:ubuntu /home/ubuntu/grocery_delivery
 
           # Pull the latest code from the repository
-          git clone https://github.com/N-JK/grocery_delivery.git .
+          git clone https://github.com/N-JK/kp.git .
 
           # Debug: List files in the directory to verify contents
           echo "Listing files after clone:"

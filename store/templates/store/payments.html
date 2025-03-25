@@ -1,33 +1,177 @@
 {% extends 'store/base.html' %}
 {% load static %}
 
+{% block title %}Payment - Fresh Mart{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-section {
+        padding: 4rem 0;
+        min-height: 80vh;
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        display: flex;
+        align-items: center;
+    }
+
+    .payment-card {
+        background: #fff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 3px 20px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .payment-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        position: relative;
+        display: inline-block;
+        font-size: 1.5rem;
+    }
+
+    .payment-title:after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #28a745;
+        border-radius: 2px;
+    }
+
+    .amount-display {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .amount-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .amount-value {
+        color: #2c3e50;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .payment-input {
+        border: 1px solid #e0e6ed;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+        background-color: #f8f9fa;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+    }
+
+    .payment-input:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        background-color: #fff;
+    }
+
+    .payment-input::placeholder {
+        color: #a0aec0;
+    }
+
+    .pay-button {
+        background: #28a745;
+        border: none;
+        border-radius: 10px;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: white;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .pay-button:hover {
+        background: #218838;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    }
+
+    .pay-button:disabled {
+        background: #a0aec0;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .secure-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        background: #e9f7ef;
+        color: #28a745;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-top: 1rem;
+    }
+
+    .secure-badge i {
+        margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .payment-section {
+            padding: 2rem 0;
+        }
+        
+        .payment-card {
+            padding: 1.5rem;
+            margin: 0 1rem;
+        }
+        
+        .amount-value {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Payment Details</h3>
-                </div>
-                <div class="card-body">
-                    <h4>Total Amount: ₹{{ total|floatformat:2 }}</h4>
-                    <form id="payment-form">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <div id="card-element" class="form-control"></div>
-                            <div id="card-errors" class="text-danger mt-2"></div>
-                        </div>
-                        <button id="submit-button" class="btn btn-primary mt-3 w-100">
-                            <span id="button-text">Pay Now</span>
-                            <span id="spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
-                        </button>
-                    </form>
+<section class="payment-section">
+    <div class="container">
+        <div class="payment-card">
+            <h2 class="payment-title">Payment Details</h2>
+            
+            <div class="amount-display">
+                <div class="amount-label">Total Amount</div>
+                <div class="amount-value">₹{{ total|floatformat:2 }}</div>
+            </div>
+
+            <form method="post" id="payment-form">
+                {% csrf_token %}
+                <div id="card-element" class="payment-input"></div>
+                <div id="card-errors" class="text-danger mt-2"></div>
+                <button type="submit" class="pay-button">
+                    Pay Now
+                </button>
+            </form>
+
+            <div class="text-center">
+                <div class="secure-badge">
+                    <i class="fas fa-lock"></i>
+                    Secured by Autofill link
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+{% endblock %}
 
+{% block extra_js %}
 <script src="https://js.stripe.com/v3/"></script>
 <script>
     // Initialize Stripe with the correct key
@@ -68,17 +212,19 @@
     
     // Handle form submission
     const form = document.getElementById('payment-form');
-    const submitButton = document.getElementById('submit-button');
-    const spinner = document.getElementById('spinner');
-    const buttonText = document.getElementById('button-text');
+    const submitButton = document.querySelector('.pay-button');
+    const spinner = document.createElement('span');
+    spinner.classList.add('spinner-border', 'spinner-border-sm', 'me-2');
+    const buttonText = document.createTextNode('Pay Now');
     
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
         
         // Disable form submission and show spinner
         submitButton.disabled = true;
-        spinner.classList.remove('d-none');
-        buttonText.textContent = 'Processing...';
+        submitButton.innerHTML = '';
+        submitButton.appendChild(spinner);
+        submitButton.appendChild(document.createTextNode('Processing...'));
         
         try {
             // Create a token
@@ -91,8 +237,8 @@
                 
                 // Re-enable form submission
                 submitButton.disabled = false;
-                spinner.classList.add('d-none');
-                buttonText.textContent = 'Pay Now';
+                submitButton.innerHTML = '';
+                submitButton.appendChild(buttonText);
             } else {
                 // Send token to server
                 const response = await fetch('{% url "process_payment" %}', {
@@ -118,8 +264,8 @@
                     
                     // Re-enable form submission
                     submitButton.disabled = false;
-                    spinner.classList.add('d-none');
-                    buttonText.textContent = 'Pay Now';
+                    submitButton.innerHTML = '';
+                    submitButton.appendChild(buttonText);
                 }
             }
         } catch (error) {
@@ -130,8 +276,8 @@
             
             // Re-enable form submission
             submitButton.disabled = false;
-            spinner.classList.add('d-none');
-            buttonText.textContent = 'Pay Now';
+            submitButton.innerHTML = '';
+            submitButton.appendChild(buttonText);
         }
     });
 </script>

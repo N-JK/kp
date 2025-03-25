@@ -4,94 +4,308 @@
 
 {% block title %}Shopping Cart - Fresh Mart{% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Shopping Cart</h2>
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<style>
+    .cart-section {
+        padding: 2rem 0;
+        background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    }
     
-    {% if cart_items %}
-        <div class="row">
-            <div class="col-md-8">
-                {% for item in cart_items %}
-                <div class="card mb-3" id="cart-item-{{ item.id }}">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-2">
-                                {% if item.product.image %}
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4">
-                                <h5>{{ item.product.name }}</h5>
-                                <p class="text-muted mb-0">${{ item.product.price }}</p>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="quantity-controls d-flex align-items-center">
-                                    <form method="post" action="{% url 'update_cart' item.id %}" class="d-inline">
+    .cart-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .cart-title:after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #28a745;
+        border-radius: 2px;
+    }
+    
+    .cart-item-card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cart-item-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cart-item-image {
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    
+    .cart-item-name {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .cart-item-price {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .quantity-controls {
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        background: white;
+        color: #2c3e50;
+        transition: all 0.2s ease;
+    }
+    
+    .quantity-btn:hover {
+        background: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+    
+    .quantity-value {
+        min-width: 40px;
+        text-align: center;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .remove-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background: #fff;
+        color: #dc3545;
+        border: 1px solid #dc3545;
+        transition: all 0.2s ease;
+    }
+    
+    .remove-btn:hover {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .summary-card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        position: sticky;
+        top: 2rem;
+    }
+    
+    .summary-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+    
+    .summary-item {
+        color: #6c757d;
+        margin-bottom: 0.75rem;
+    }
+    
+    .summary-total {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    .checkout-btn {
+        background: #28a745;
+        border: none;
+        padding: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .checkout-btn:hover {
+        background: #218838;
+        transform: translateY(-1px);
+    }
+    
+    .continue-btn {
+        border: 2px solid #28a745;
+        color: #28a745;
+        font-weight: 600;
+        padding: 0.75rem;
+    }
+    
+    .continue-btn:hover {
+        background: #28a745;
+        color: white;
+    }
+    
+    .empty-cart {
+        padding: 4rem 0;
+        text-align: center;
+    }
+    
+    .empty-cart h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-cart p {
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+    
+    .empty-cart .btn {
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+        .cart-item-card .row {
+            flex-direction: column;
+        }
+        
+        .cart-item-card .col-md-2,
+        .cart-item-card .col-md-4,
+        .cart-item-card .col-md-3,
+        .cart-item-card .col-md-1 {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .quantity-controls {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="cart-section">
+    <div class="container">
+        <h2 class="cart-title">Shopping Cart</h2>
+        
+        {% if cart_items %}
+            <div class="row">
+                <div class="col-md-8">
+                    {% for item in cart_items %}
+                    <div class="card cart-item-card" id="cart-item-{{ item.id }}">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    {% if item.product.image %}
+                                    <div class="cart-item-image">
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 class="cart-item-name">{{ item.product.name }}</h5>
+                                    <p class="cart-item-price">${{ item.product.price }}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="quantity-controls">
+                                        <form method="post" action="{% url 'update_cart' item.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="decrease">
+                                            <button type="submit" class="quantity-btn">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                        </form>
+                                        <span class="quantity-value mx-2">{{ item.quantity }}</span>
+                                        <form method="post" action="{% url 'update_cart' item.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="increase">
+                                            <button type="submit" class="quantity-btn">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="cart-item-price h5 mb-0">${{ item.product.price|multiply:item.quantity }}</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <form method="post" action="{% url 'remove_from_cart' item.id %}" class="d-inline">
                                         {% csrf_token %}
-                                        <input type="hidden" name="action" value="decrease">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm">
-                                            <i class="bi bi-dash"></i>
-                                        </button>
-                                    </form>
-                                    <span class="mx-2">{{ item.quantity }}</span>
-                                    <form method="post" action="{% url 'update_cart' item.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="increase">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm">
-                                            <i class="bi bi-plus"></i>
+                                        <button type="submit" class="remove-btn">
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <p class="h5 mb-0">${{ item.product.price|multiply:item.quantity }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card summary-card">
+                        <div class="card-body">
+                            <h4 class="summary-title">Order Summary</h4>
+                            <div class="d-flex justify-content-between summary-item">
+                                <span>Subtotal</span>
+                                <span>${{ total }}</span>
                             </div>
-                            <div class="col-md-1">
-                                <form method="post" action="{% url 'remove_from_cart' item.id %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                            <hr>
+                            <div class="d-flex justify-content-between summary-total mb-4">
+                                <span>Total</span>
+                                <span>${{ total }}</span>
                             </div>
+                            <a href="{% url 'checkout' %}" class="btn checkout-btn w-100">Proceed to Checkout</a>
+                            <a href="{% url 'home' %}" class="btn continue-btn w-100 mt-3">Continue Shopping</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="mb-3">Order Summary</h4>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span>${{ total }}</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="h5">Total</span>
-                            <span class="h5">${{ total }}</span>
-                        </div>
-                        <a href="{% url 'checkout' %}" class="btn btn-success w-100">Proceed to Checkout</a>
-                        <a href="{% url 'home' %}" class="btn btn-outline-primary w-100 mt-2">Continue Shopping</a>
-                    </div>
-                </div>
+        {% else %}
+            <div class="empty-cart">
+                <h4>Your cart is empty</h4>
+                <p>Browse our products and add items to your cart</p>
+                <a href="{% url 'home' %}" class="btn continue-btn">Continue Shopping</a>
             </div>
-        </div>
-    {% else %}
-        <div class="text-center py-5">
-            <h4>Your cart is empty</h4>
-            <p class="text-muted">Browse our products and add items to your cart.</p>
-            <a href="{% url 'home' %}" class="btn btn-primary mt-3">Continue Shopping</a>
-        </div>
-    {% endif %}
-</div>
-
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+        {% endif %}
+    </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
-
+<script>
+    // Add smooth transitions for quantity updates
+    document.querySelectorAll('.quantity-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.add('clicked');
+            setTimeout(() => {
+                this.classList.remove('clicked');
+            }, 200);
+        });
+    });
+</script>
 {% endblock %}

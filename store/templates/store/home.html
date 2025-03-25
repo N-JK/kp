@@ -7,222 +7,421 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+    }
+
     /* Hero Section */
     .hero-section {
-        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                    url('https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974&auto=format&fit=crop') no-repeat center center;
-        background-size: cover;
-        min-height: 600px;
+        position: relative;
+        min-height: 100vh;
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat fixed;
         display: flex;
         align-items: center;
-        color: #fff;
-        position: relative;
-    }
-    
-    .hero-content {
+        justify-content: center;
         text-align: center;
-        max-width: 800px;
-        margin: 0 auto;
         padding: 2rem;
     }
-    
-    .hero-content h1 {
-        font-size: 3.5rem;
-        font-weight: 800;
-        margin-bottom: 1.5rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .hero-content p {
-        font-size: 1.25rem;
-        margin-bottom: 2rem;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
     }
 
-    /* Login Buttons */
-    .login-buttons {
-        margin-top: 2rem;
+    .hero-content {
+        max-width: 800px;
+        width: 100%;
+        padding: 0 20px;
+        position: relative;
+        z-index: 2;
     }
-    
-    .login-btn {
-        display: inline-block;
-        padding: 0.8rem 2rem;
-        margin: 0.5rem;
+
+    .hero-title {
+        font-size: 4.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        line-height: 1.2;
+        letter-spacing: -1px;
+    }
+
+    .hero-description {
+        font-size: 1.35rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+        font-weight: 300;
+    }
+
+    .search-container {
+        margin-bottom: 2rem;
+        padding: 0 15px;
+        transform: translateY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .search-container:hover {
+        transform: translateY(-2px);
+    }
+
+    .search-form {
+        position: relative;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 18px 60px 18px 30px;
+        border: none;
         border-radius: 50px;
-        font-weight: 600;
-        text-decoration: none;
+        font-size: 1.1rem;
+        outline: none;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
         transition: all 0.3s ease;
     }
-    
-    .supplier-login {
-        background-color: #00b761;
-        color: white;
-        border: 2px solid #00b761;
-    }
-    
-    .supplier-login:hover {
-        background-color: transparent;
-        color: white;
-        border-color: white;
+
+    .search-input:focus {
+        background: white;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
     }
 
-    /* Search Bar */
-    .search-container {
-        max-width: 600px;
-        margin: 2rem auto;
-        position: relative;
-    }
-
-    .search-bar {
-        width: 100%;
-        padding: 1rem 1.5rem;
-        font-size: 1.1rem;
-        border: none;
-        border-radius: 50px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .search-btn {
+    .search-button {
         position: absolute;
-        right: 10px;
+        right: 8px;
         top: 50%;
         transform: translateY(-50%);
-        background: #00b761;
+        background: linear-gradient(45deg, #00b761, #008c4d);
         border: none;
-        padding: 0.5rem 1.5rem;
-        border-radius: 50px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
         color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0, 183, 97, 0.3);
+    }
+
+    .search-button:hover {
+        background: linear-gradient(45deg, #00c76b, #009b54);
+        transform: translateY(-50%) scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 183, 97, 0.4);
+    }
+
+    .start-shopping-btn {
+        display: inline-block;
+        background: linear-gradient(45deg, #00b761, #008c4d);
+        color: white;
+        border: none;
+        padding: 1.2rem 3rem;
+        font-size: 1.1rem;
         font-weight: 600;
-    }
-    
-    /* Category Section */
-    .categories-section {
-        padding: 5rem 0;
-        background-color: #f8f9fa;
-    }
-    
-    .category-card {
-        border-radius: 15px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(0, 183, 97, 0.3);
+        position: relative;
         overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .start-shopping-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
+
+    .start-shopping-btn:hover {
+        background: linear-gradient(45deg, #00c76b, #009b54);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 183, 97, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .start-shopping-btn:hover::before {
+        left: 100%;
+    }
+
+    /* Categories Section */
+    .categories-section {
+        padding: 6rem 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        position: relative;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .category-card {
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.4s ease;
         margin-bottom: 2rem;
         background: white;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    
-    .category-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .category-img {
-        height: 250px;
-        object-fit: cover;
-        width: 100%;
-    }
-    
-    .category-content {
-        padding: 1.5rem;
-        text-align: center;
-    }
-    
-    /* Featured Products */
-    .featured-products {
-        padding: 5rem 0;
-    }
-    
-    .section-title {
-        text-align: center;
-        margin-bottom: 3rem;
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         position: relative;
     }
-    
+
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 40%);
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .category-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .category-card:hover::before {
+        opacity: 1;
+    }
+
+    .category-img {
+        height: 280px;
+        object-fit: cover;
+        width: 100%;
+        transition: transform 0.6s ease;
+    }
+
+    .category-card:hover .category-img {
+        transform: scale(1.08);
+    }
+
+    .category-content {
+        padding: 1.8rem;
+        text-align: center;
+        background: white;
+        position: relative;
+        z-index: 2;
+    }
+
+    .category-content h3 {
+        font-weight: 600;
+        color: #2d3436;
+        margin: 0;
+        font-size: 1.35rem;
+        transition: color 0.3s ease;
+    }
+
+    .category-card:hover .category-content h3 {
+        color: #00b761;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #2d3436;
+        letter-spacing: -1px;
+    }
+
     .section-title:after {
         content: '';
         display: block;
-        width: 50px;
-        height: 3px;
-        background: #00b761;
-        margin: 1rem auto;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(45deg, #00b761, #008c4d);
+        margin: 1.2rem auto 0;
+        border-radius: 2px;
     }
-    
-    .product-card {
-        border-radius: 15px;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        height: 100%;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-    
-    .product-img {
-        height: 250px;
-        object-fit: cover;
-    }
-    
-    .product-content {
-        padding: 1.5rem;
-    }
-    
-    .product-price {
-        color: #00b761;
-        font-weight: 600;
-        font-size: 1.25rem;
-    }
-    
+
     /* Features Section */
     .features-section {
-        padding: 5rem 0;
-        background-color: #f8f9fa;
+        padding: 6rem 0;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        position: relative;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-    
+
     .feature-card {
         text-align: center;
-        padding: 2rem;
-        border-radius: 15px;
+        padding: 2.5rem;
+        border-radius: 16px;
         background: white;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(0,0,0,0.05);
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
-    
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
     .feature-icon {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         color: #00b761;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* Buttons */
-    .btn-primary {
-        background-color: #00b761;
-        border-color: #00b761;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        border-radius: 50px;
+        margin-bottom: 1.8rem;
+        background: rgba(0,183,97,0.1);
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
         transition: all 0.3s ease;
     }
-    
-    .btn-primary:hover {
-        background-color: #009951;
-        border-color: #009951;
-        transform: translateY(-2px);
+
+    .feature-card:hover .feature-icon {
+        background: #00b761;
+        color: white;
+        transform: scale(1.1);
     }
-    
+
+    .feature-card h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+        color: #636e72;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
     /* Animations */
-    .fade-up {
+    .animate-text {
         opacity: 0;
         transform: translateY(20px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
+        transition: all 0.8s ease;
     }
-    
+
+    .animate-text.delay-1 {
+        transition-delay: 0.2s;
+    }
+
+    .animate-text.delay-2 {
+        transition-delay: 0.4s;
+    }
+
+    .animate-text.delay-3 {
+        transition-delay: 0.6s;
+    }
+
+    .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease;
+    }
+
     .fade-up.visible {
         opacity: 1;
         transform: translateY(0);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 991px) {
+        .hero-title {
+            font-size: 3.5rem;
+        }
+        .hero-description {
+            font-size: 1.2rem;
+        }
+        .section-title {
+            font-size: 2.4rem;
+        }
+        .category-img {
+            height: 240px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+        .hero-description {
+            font-size: 1.1rem;
+        }
+        .search-input {
+            padding: 15px 50px 15px 25px;
+            font-size: 1rem;
+        }
+        .start-shopping-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+        }
+        .section-title {
+            font-size: 2rem;
+        }
+        .feature-card {
+            padding: 2rem;
+        }
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 2.2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        .hero-description {
+            font-size: 1rem;
+        }
+        .search-input {
+            padding: 12px 45px 12px 20px;
+        }
+        .search-button {
+            width: 36px;
+            height: 36px;
+        }
+        .start-shopping-btn {
+            padding: 0.9rem 2rem;
+            font-size: 0.9rem;
+        }
+        .section-title {
+            font-size: 1.8rem;
+        }
+        .category-img {
+            height: 200px;
+        }
     }
 </style>
 {% endblock %}
@@ -230,38 +429,43 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="container">
-        <div class="hero-content">
-            <h1 class="fade-up">Fresh Food Delivered Fresh</h1>
-            <p class="fade-up">Get your groceries delivered to your doorstep within hours. Fresh, quality products guaranteed.</p>
-            <div class="login-buttons fade-up">
-                <a href="{% url 'login' %}" class="login-btn btn-primary">Shop Now</a>
-            </div>
-            <div class="search-container fade-up">
-                <form action="{% url 'search' %}" method="GET" class="d-flex">
-                    <input type="text" name="q" class="search-bar" placeholder="Search for groceries..." required>
-                    <button type="submit" class="search-btn">
+    <div class="hero-content">
+        <h1 class="hero-title animate-text">
+            Fresh Food<br>
+            Delivered Fresh
+        </h1>
+        <p class="hero-description animate-text delay-1">
+            Get your groceries delivered to your doorstep<br>
+            within hours. Fresh, quality products guaranteed.
+        </p>
+        <div class="search-container animate-text delay-2">
+            <form action="{% url 'search' %}" method="GET" class="search-form">
+                <div class="search-input-wrapper">
+                    <input type="text" name="q" placeholder="Search for groceries..." class="search-input" autocomplete="off">
+                    <button type="submit" class="search-button">
                         <i class="fas fa-search"></i>
                     </button>
-                </form>
-            </div>
-            <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg mt-4 fade-up">Start Shopping</a>
+                </div>
+            </form>
         </div>
+        <a href="{% url 'product_list' %}" class="start-shopping-btn animate-text delay-3">
+            <i class="fas fa-shopping-cart me-2"></i> Start Shopping
+        </a>
     </div>
 </section>
 
 <!-- Categories Section -->
 <section class="categories-section">
     <div class="container">
-        <h2 class="section-title fade-up">Shop by Category</h2>
-        <div class="row">
+        <h2 class="section-title fade-up">Explore Categories</h2>
+        <div class="row g-4">
             {% for category in categories %}
-            <div class="col-md-4 fade-up">
+            <div class="col-md-4 fade-up" style="transition-delay: {{ forloop.counter|add:2 }}00ms">
                 <a href="{% url 'category_products' category.slug %}" class="text-decoration-none">
                     <div class="category-card">
                         <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-img">
                         <div class="category-content">
-                            <h3 class="mb-0">{{ category.name }}</h3>
+                            <h3>{{ category.name }}</h3>
                         </div>
                     </div>
                 </a>
@@ -271,63 +475,36 @@
     </div>
 </section>
 
-<!-- Featured Products -->
-<section class="featured-products">
-    <div class="container">
-        <h2 class="section-title fade-up">Featured Products</h2>
-        <div class="row g-4">
-            {% if featured_products %}
-                {% for product in featured_products %}
-                <div class="col-md-3 fade-up">
-                    <div class="product-card">
-                        {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
-                        {% else %}
-                            <img src="{% static 'store/images/no-image.png' %}" alt="{{ product.name }}" class="product-img">
-                        {% endif %}
-                        <div class="product-content">
-                            <h5 class="mb-2">{{ product.name }}</h5>
-                            <p class="product-price mb-3">${{ product.price }}</p>
-                            <form method="post" action="{% url 'add_to_cart' product.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-12 text-center">
-                    <p>No featured products available at the moment.</p>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</section>
-
 <!-- Features Section -->
 <section class="features-section">
     <div class="container">
+        <h2 class="section-title fade-up">Why Choose Us</h2>
         <div class="row g-4">
-            <div class="col-md-4 fade-up">
+            <div class="col-md-4 fade-up" style="transition-delay: 200ms">
                 <div class="feature-card">
-                    <i class="fas fa-truck feature-icon"></i>
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
                     <h3>Fast Delivery</h3>
-                    <p>Get your groceries delivered within hours</p>
+                    <p>Get your groceries delivered within hours right to your doorstep</p>
                 </div>
             </div>
-            <div class="col-md-4 fade-up">
+            <div class="col-md-4 fade-up" style="transition-delay: 400ms">
                 <div class="feature-card">
-                    <i class="fas fa-leaf feature-icon"></i>
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
                     <h3>Fresh & Organic</h3>
-                    <p>100% fresh and organic products</p>
+                    <p>100% fresh and organic products sourced directly from farmers</p>
                 </div>
             </div>
-            <div class="col-md-4 fade-up">
+            <div class="col-md-4 fade-up" style="transition-delay: 600ms">
                 <div class="feature-card">
-                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
                     <h3>Secure Payments</h3>
-                    <p>Multiple secure payment options</p>
+                    <p>Multiple secure payment options for your convenience</p>
                 </div>
             </div>
         </div>
@@ -337,6 +514,7 @@
 
 {% block extra_js %}
 <script>
+    // Reveal animations on scroll
     function revealOnScroll() {
         const elements = document.querySelectorAll('.fade-up');
         elements.forEach(element => {
@@ -351,6 +529,28 @@
 
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', revealOnScroll);
+
+    // Hero section animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add class to trigger animations when page loads
+        const animatedElements = document.querySelectorAll('.animate-text');
+        setTimeout(() => {
+            animatedElements.forEach(element => {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            });
+        }, 100);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
 </script>
 {% endblock %}
 
